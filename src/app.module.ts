@@ -4,6 +4,7 @@ import { QuestionsModule } from './questions/questions.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DATABASE'),
-        entities: [],
+        entities: [User],
         synchronize: true,
         charset: 'utf8mb4',
       }),
