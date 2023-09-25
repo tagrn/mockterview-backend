@@ -1,7 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { JWTResponse } from 'src/users/responses/jwt.response';
+import { JWTSchema } from 'src/users/schemas/jwt.schema';
+import { UserSchema } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -30,13 +31,13 @@ export class AuthService {
     return null;
   }
 
-  async getJWT(user: any): Promise<JWTResponse> {
+  async getJWT(user: UserSchema): Promise<JWTSchema> {
     const payload = {
       nickname: user.nickname,
       email: user.email,
       sub: user.id,
     };
-    return new JWTResponse(
+    return new JWTSchema(
       this.configService.get('TOKEN_TYPE'),
       this.jwtService.sign(payload),
     );

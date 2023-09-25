@@ -1,4 +1,4 @@
-export class JWTResponse {
+export class JWTSchema {
   public tokenType: string;
   public accessToken: string;
 

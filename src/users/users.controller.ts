@@ -1,18 +1,10 @@
-import {
-  Body,
-  Controller,
-  Post,
-  UseGuards,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { AuthService } from 'src/auth/auth.service';
 import { LoginAuthGuard } from 'src/auth/login-auth.guard';
 import { LoginRequest } from './requests/login.request';
 import { JWTResponse } from './responses/jwt.response';
 import { UsersService } from './users.service';
-import { AuthService } from 'src/auth/auth.service';
 
 @ApiTags('USER')
 @Controller('users')
@@ -29,6 +21,7 @@ export class UsersController {
     let user = await this.usersService.getUserByEmail(email);
     if (!user) user = await this.usersService.saveUser(email);
 
-    return await this.authService.getJWT(user);
+    const jwtSchema = await this.authService.getJWT(user);
+    return new JWTResponse(jwtSchema.tokenType, jwtSchema.accessToken);
   }
 }
