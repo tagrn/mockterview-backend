@@ -11,14 +11,14 @@ export class UsersService {
   ) {}
 
   async saveUser(email: string) {
-    this.usersRepository.save({ email });
+    return this.usersRepository.save({ email });
   }
 
   async getUser(id: number) {
-    return this.usersRepository.findBy({ id });
+    return this.usersRepository.findOneBy({ id });
   }
 
   async getUserByEmail(email: string) {
-    return this.usersRepository.findBy({ email });
+    return this.usersRepository.findOneBy({ email });
   }
 }

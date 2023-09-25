@@ -1,34 +1,35 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { LoginAuthGuard } from 'src/auth/login-auth.guard';
 import { LoginRequest } from './requests/login.request';
 import { JWTResponse } from './responses/jwt.response';
-import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { ConfigService } from '@nestjs/config';
+import { AuthService } from 'src/auth/auth.service';
 
 @ApiTags('USER')
 @Controller('users')
 export class UsersController {
   constructor(
-    // private readonly authService: AuthService,
-    private readonly configService: ConfigService,
+    private readonly authService: AuthService,
     private readonly usersService: UsersService,
   ) {}
 
+  @ApiBody({ type: LoginRequest })
+  @UseGuards(LoginAuthGuard)
   @Post('login')
-  async loginApi(@Body() loginRequest: LoginRequest): Promise<JWTResponse> {
-    // const googleUser = await this.authService.getGoogleUser(
-    //   loginRequest.tokenType,
-    //   loginRequest.accessToken,
-    // );
-
-    // let user = this.usersService.getUserByEmail(googleUser.email);
-    // if (!user) {
-    //   user = await this.usersService.saveUser(googleUser.email);
-    // }
-    return new JWTResponse(
-      this.configService.get('tokenType'),
-      '',
-      // await this.authService.getJWT(user),
-    );
+  async loginApi(@Body() email: string): Promise<JWTResponse> {
+    let user = await this.usersService.getUserByEmail(email);
+    if (!user) {
+      user = await this.usersService.saveUser(email);
+    }
+    return await this.authService.getJWT(user);
   }
 }

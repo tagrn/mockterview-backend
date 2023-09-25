@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { QuestionsModule } from './questions/questions.module';
-import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
+import { QuestionsModule } from './questions/questions.module';
 import { User } from './users/entities/user.entity';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    AuthModule,
     QuestionsModule,
     UsersModule,
     ConfigModule.forRoot({ isGlobal: true, cache: true }),
