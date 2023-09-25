@@ -1,9 +1,11 @@
+import { QuestionSet } from 'src/questions/entities/question-set.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -29,4 +31,7 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date | null;
+
+  @OneToMany(() => QuestionSet, (qs) => qs.userId)
+  QuestionSets: QuestionSet[];
 }

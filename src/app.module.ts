@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { QuestionsModule } from './questions/questions.module';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
+import { QuestionSet } from './questions/entities/question-set.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { UsersModule } from './users/users.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DATABASE'),
-        entities: [User],
+        entities: [User, QuestionSet],
         synchronize: true,
         charset: 'utf8mb4',
       }),

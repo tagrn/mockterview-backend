@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LoginAuthGuard } from './login-auth.guard';
+import { JWTStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { LoginAuthGuard } from './login-auth.guard';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, LoginAuthGuard],
+  providers: [AuthService, LoginAuthGuard, JWTStrategy],
   exports: [AuthService, LoginAuthGuard],
 })
 export class AuthModule {}
