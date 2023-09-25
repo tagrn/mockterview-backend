@@ -27,9 +27,8 @@ export class UsersController {
   @Post('login')
   async loginApi(@Body() email: string): Promise<JWTResponse> {
     let user = await this.usersService.getUserByEmail(email);
-    if (!user) {
-      user = await this.usersService.saveUser(email);
-    }
+    if (!user) user = await this.usersService.saveUser(email);
+
     return await this.authService.getJWT(user);
   }
 }

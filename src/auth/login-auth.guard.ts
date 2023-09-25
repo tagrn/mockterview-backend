@@ -18,6 +18,7 @@ export class LoginAuthGuard implements CanActivate {
     const googleUser: GoogleUserSchema = await this.authService.getGoogleUser(
       accessToken,
     );
+
     if (!googleUser.email) {
       throw new UnauthorizedException();
     }
