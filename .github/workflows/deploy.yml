@@ -1,0 +1,40 @@
+name: CI/CD Docker
+
+strategy:
+  matrix:
+    node-version: [18.17.0]
+
+on:
+  push:
+    branches: [main]
+env:
+  PORT: 3000
+  IMAGE: server
+  CONTAINER: server
+  REPOSITORY: mockterview-backend
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: [mockterview]
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Nest.js build
+        run: |
+          yarn test
+          yarn build
+      - name: Docker build
+        run: docker build -t ${{ env.IMAGE }} /home/ubuntu/${{ env.REPOSITORY }}
+      - name: Docker stop
+        run: |
+          docker ps -f name=${{ env.CONTAINER }} -q | xargs --no-run-if-empty docker container stop
+          docker container ls -a -f name=${{ env.CONTAINER }} -q | xargs -r docker container rm
+      - name: Docker run
+        run: docker run -d --name ${{ env.CONTAINER }} -p ${{ env.PORT }}:${{ env.PORT }} -v /etc/localtime:/etc/localtime:ro --restart always ${{ env.IMAGE }}
+      - name: remove Docker <none> image
+        run: if [ "$(docker images -f dangling=true -q)" != "" ]; then docker rmi $(docker images -f dangling=true -q); fi
