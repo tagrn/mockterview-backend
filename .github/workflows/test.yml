@@ -1,0 +1,14 @@
+name: GitHub Actions CI/CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: [mockterview]
+    steps:
+      - name: test
+        run: |
+          sudo ln -sf /usr/share/zoneinfo/Egypt /etc/localtime
