@@ -1,9 +1,5 @@
 name: CI/CD Docker
 
-strategy:
-  matrix:
-    node-version: [18.17.0]
-
 on:
   push:
     branches: [main]
@@ -17,6 +13,9 @@ jobs:
   deploy:
     name: Deploy
     runs-on: [mockterview]
+    strategy:
+      matrix:
+        node-version: [18.17.0]
     steps:
       - name: Check out source code
         uses: actions/checkout@v4
