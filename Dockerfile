@@ -1,3 +1,6 @@
 FROM node:18.17-slim
-COPY ./dist .
+RUN ls
+RUN cd dist
+COPY . .
 EXPOSE 3000
+CMD ['node', 'main']
