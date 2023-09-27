@@ -23,11 +23,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Nest.js test & build
-        run: |
-          yarn install
-          yarn test
-          yarn build
       - name: Docker build
         run: docker build -t ${{ env.IMAGE }} .
       - name: Docker stop

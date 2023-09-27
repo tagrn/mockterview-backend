@@ -1,4 +1,6 @@
 FROM node:18.17-slim
-COPY . ./dist
+COPY . .
+RUN yarn install
+RUN yarn build
 EXPOSE 3000
-# CMD ['node', 'main']
+CMD ['node', 'dist/main']
