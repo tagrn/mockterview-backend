@@ -1,10 +1,10 @@
 export class UserSchema {
-  constructor(email: string, nickname: string, id: number = undefined) {
+  constructor(id: number, email: string, nickname: string) {
     this.id = id;
     this.email = email;
     this.nickname = nickname;
   }
-  id?: number;
+  id: number;
   email: string;
   nickname: string;
 }
