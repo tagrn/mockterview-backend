@@ -23,23 +23,10 @@ export class AuthService {
       });
   }
 
-  async validateUser(email: string): Promise<any> {
-    // const user = await this.usersService.getUserByEmail(email);
-    // if (user) {
-    //   return user;
-    // }
-    return null;
-  }
-
   async getJWT(user: UserSchema): Promise<JWTSchema> {
-    const payload = {
-      nickname: user.nickname,
-      email: user.email,
-      sub: user.id,
-    };
     return new JWTSchema(
       this.configService.get('TOKEN_TYPE'),
-      this.jwtService.sign(payload),
+      this.jwtService.sign({ ...user }),
     );
   }
 }

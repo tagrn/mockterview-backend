@@ -1,13 +1,16 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { AuthorizedUser } from 'src/auth/auth.decorator';
 import { JWTAuthGuard } from 'src/auth/jwt-auth.guard';
-import { QuestionSummaryResponse } from './responses/question-summary.response';
+import { UserSchema } from 'src/users/schemas/user.schema';
 import { QuestionsService } from './questions.service';
+import { QuestionSummaryResponse } from './responses/question-summary.response';
 
 @ApiTags('QUESTION')
 @Controller('questions')
 export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
+
   @Get('basic')
   async getBasicQuestionSummariesApi(): Promise<QuestionSummaryResponse[]> {
     return [
@@ -19,11 +22,10 @@ export class QuestionsController {
   @UseGuards(JWTAuthGuard)
   @Get()
   async getQuestionSummariesApi(
-    @Request() req,
+    @AuthorizedUser() user: UserSchema,
   ): Promise<QuestionSummaryResponse[]> {
-    const userId: number = req.user.userId;
     const questionSummaries =
-      await this.questionsService.getQuestionSummariesByUserId(userId);
+      await this.questionsService.getQuestionSummariesByUserId(user.id);
     return questionSummaries.map(
       (qs) => new QuestionSummaryResponse(qs.id, qs.title),
     );
