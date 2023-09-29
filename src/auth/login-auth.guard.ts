@@ -23,7 +23,7 @@ export class LoginAuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    request.body = googleUser.email;
+    request.user = { email: googleUser.email };
     return true;
   }
 }

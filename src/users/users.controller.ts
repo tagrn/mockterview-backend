@@ -1,5 +1,6 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { GoogleEmail } from 'src/auth/auth.decorator';
 import { AuthService } from 'src/auth/auth.service';
 import { LoginAuthGuard } from 'src/auth/login-auth.guard';
 import { LoginRequest } from './requests/login.request';
@@ -17,7 +18,7 @@ export class UsersController {
   @ApiBody({ type: LoginRequest })
   @UseGuards(LoginAuthGuard)
   @Post('login')
-  async loginApi(@Body() email: string): Promise<JWTResponse> {
+  async loginApi(@GoogleEmail() email: string): Promise<JWTResponse> {
     let user = await this.usersService.getUserByEmail(email);
     if (!user) user = await this.usersService.saveUser(email);
 
