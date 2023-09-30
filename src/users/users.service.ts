@@ -21,7 +21,6 @@ export class UsersService {
     if (!user) {
       return null;
     }
-
     return new UserSchema(user.id, user.nickname, user.email);
   }
 }
