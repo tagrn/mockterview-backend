@@ -15,6 +15,15 @@ export class QuestionsService {
     private readonly questionSetRepository: Repository<QuestionSet>,
   ) {}
 
+  async getBasicQuestionsApi(): Promise<QuestionSummarySchema[]> {
+    const questionSet1 = await this.questionSetRepository.findOneBy({ id: 1 });
+    const questionSet2 = await this.questionSetRepository.findOneBy({ id: 2 });
+    return [
+      new QuestionSummarySchema(questionSet1.id, questionSet1.title),
+      new QuestionSummarySchema(questionSet2.id, questionSet2.title),
+    ];
+  }
+
   async getQuestionSummariesByUserId(
     userId: number,
   ): Promise<QuestionSummarySchema[]> {

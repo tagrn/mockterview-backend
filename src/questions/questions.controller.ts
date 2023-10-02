@@ -24,10 +24,11 @@ export class QuestionsController {
 
   @Get('basic')
   async getBasicQuestionSummariesApi(): Promise<QuestionSummaryResponse[]> {
-    return [
-      new QuestionSummaryResponse(1, '모의 면접 1'),
-      new QuestionSummaryResponse(2, '모의 면접 2'),
-    ];
+    const questionSummaries =
+      await this.questionsService.getBasicQuestionsApi();
+    return questionSummaries.map(
+      (qs) => new QuestionSummaryResponse(qs.id, qs.title),
+    );
   }
 
   @ApiBearerAuth()
