@@ -6,10 +6,11 @@ import {
   ParseIntPipe,
   Post,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthorizedUser } from 'src/auth/auth.decorator';
-import { JWTAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JWTAuthGuard, UnsafeJWTAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserSchema } from 'src/users/schemas/user.schema';
 import { QuestionsService } from './questions.service';
 import { QuestionSetRequest } from './requests/question-set.request';
@@ -44,7 +45,7 @@ export class QuestionsController {
     );
   }
 
-  // @TODO 인터셉터 필요
+  @UseGuards(UnsafeJWTAuthGuard)
   @ApiBearerAuth()
   @Get('/:id')
   async getQuestionSetApi(
