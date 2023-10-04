@@ -5,8 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  UseGuards,
-  UseInterceptors,
+  UseGuards
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthorizedUser } from 'src/auth/auth.decorator';
@@ -14,9 +13,9 @@ import { JWTAuthGuard, UnsafeJWTAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserSchema } from 'src/users/schemas/user.schema';
 import { QuestionsService } from './questions.service';
 import { QuestionSetRequest } from './requests/question-set.request';
+import { QuestionSetResponse } from './responses/question-set.response';
 import { QuestionSummaryResponse } from './responses/question-summary.response';
 import { UnsavedQuestionSetSchema } from './schemas/question-set.schema';
-import { QuestionSetResponse } from './responses/question-set.response';
 
 @ApiTags('QUESTION')
 @Controller('questions')
