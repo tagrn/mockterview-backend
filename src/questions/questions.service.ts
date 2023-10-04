@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { Brackets, Repository } from 'typeorm';
-import { QuestionSet } from './entities/question-set.entity';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QuestionSummarySchema } from './schemas/question-summary.schema';
+import { Repository } from 'typeorm';
+import { QuestionSet } from './entities/question-set.entity';
 import {
   QuestionSetSchema,
   UnsavedQuestionSetSchema,
 } from './schemas/question-set.schema';
+import { QuestionSummarySchema } from './schemas/question-summary.schema';
 
 @Injectable()
 export class QuestionsService {
@@ -35,18 +39,20 @@ export class QuestionsService {
     questionsSetId: number,
     userId: number,
   ): Promise<QuestionSetSchema> {
-    const questionSet: QuestionSet = await this.questionSetRepository
-      .createQueryBuilder('questionSet')
-      .where('questionSet.id = :questionsSetId', { questionsSetId })
-      .andWhere(
-        new Brackets((qb) => {
-          qb.where('questionSet.userId = :userId', { userId }).orWhere(
-            'questionSet.isPrivate = :isPrivate',
-            { isPrivate: false },
-          );
-        }),
-      )
-      .getOne();
+    const questionSet: QuestionSet = await this.questionSetRepository.findOneBy(
+      {
+        id: questionsSetId,
+      },
+    );
+
+    if (!questionSet) {
+      throw new NotFoundException();
+    }
+
+    if (questionSet.userId !== userId && questionSet.isPrivate === true) {
+      throw new ForbiddenException();
+    }
+
     return new QuestionSetSchema(
       questionSet.id,
       questionSet.title,
