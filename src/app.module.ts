@@ -24,7 +24,7 @@ import { QuestionSet } from './questions/entities/question-set.entity';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DATABASE'),
         entities: [User, QuestionSet],
-        synchronize: true,
+        synchronize: false,
         charset: 'utf8mb4',
       }),
       inject: [ConfigService],
