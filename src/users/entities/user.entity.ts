@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 
 @Index('email', ['email'], { unique: true })
-@Index('nickanme', ['nickname'], { unique: true })
 @Entity()
 export class User {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
