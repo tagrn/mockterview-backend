@@ -5,12 +5,12 @@ import {
   Param,
   ParseIntPipe,
   Post,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AuthorizedUser } from 'src/auth/auth.decorator';
-import { JWTAuthGuard, UnsafeJWTAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UserSchema } from 'src/users/schemas/user.schema';
+import { AuthorizedUser } from '../auth/auth.decorator';
+import { JWTAuthGuard, UnsafeJWTAuthGuard } from '../auth/jwt-auth.guard';
+import { UserSchema } from '../users/schemas/user.schema';
 import { QuestionsService } from './questions.service';
 import { QuestionSetRequest } from './requests/question-set.request';
 import { QuestionSetResponse } from './responses/question-set.response';

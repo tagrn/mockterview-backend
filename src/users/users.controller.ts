@@ -1,8 +1,8 @@
 import { Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { GoogleEmail } from 'src/auth/auth.decorator';
-import { AuthService } from 'src/auth/auth.service';
-import { LoginAuthGuard } from 'src/auth/login-auth.guard';
+import { GoogleEmail } from '../auth/auth.decorator';
+import { AuthService } from '../auth/auth.service';
+import { LoginAuthGuard } from '../auth/login-auth.guard';
 import { LoginRequest } from './requests/login.request';
 import { JWTResponse } from './responses/jwt.response';
 import { UsersService } from './users.service';

@@ -1,4 +1,3 @@
-import { QuestionSet } from 'src/questions/entities/question-set.entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { QuestionSet } from './question-set.entity';
 
 @Index('email', ['email'], { unique: true })
 @Entity()

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { QuestionSet } from './entities/question-set.entity';
+import { QuestionSet } from '../entities/question-set.entity';
 import {
   QuestionSetSchema,
   UnsavedQuestionSetSchema,
