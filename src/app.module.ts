@@ -5,16 +5,16 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { QuestionSet } from './entities/question-set.entity';
 import { User } from './entities/user.entity';
-import { QuestionsModule } from './questions/questions.module';
-import { UsersModule } from './users/users.module';
+import { QuestionModule } from './question/question.module';
+import { UserModule } from './user/user.module';
 import { QuestionSetViewCount } from './entities/question-set-view-count';
 import { News } from './entities/news';
 
 @Module({
   imports: [
     AuthModule,
-    QuestionsModule,
-    UsersModule,
+    QuestionModule,
+    UserModule,
     ConfigModule.forRoot({ isGlobal: true, cache: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

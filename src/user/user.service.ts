@@ -5,19 +5,19 @@ import { User } from '../entities/user.entity';
 import { UserSchema } from './schemas/user.schema';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async saveUser(email: string) {
-    const user = await this.usersRepository.save({ email });
+    const user = await this.userRepository.save({ email });
     return new UserSchema(user.id, user.email, user.nickname);
   }
 
   async getUserByEmail(email: string): Promise<UserSchema | null> {
-    const user = await this.usersRepository.findOneBy({ email });
+    const user = await this.userRepository.findOneBy({ email });
     if (!user) {
       return null;
     }

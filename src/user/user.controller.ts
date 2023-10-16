@@ -5,14 +5,14 @@ import { AuthService } from '../auth/auth.service';
 import { LoginAuthGuard } from '../auth/login-auth.guard';
 import { LoginRequest } from './requests/login.request';
 import { JWTResponse } from './responses/jwt.response';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 
 @ApiTags('USER')
 @Controller('users')
-export class UsersController {
+export class UserController {
   constructor(
     private readonly authService: AuthService,
-    private readonly usersService: UsersService,
+    private readonly usersService: UserService,
   ) {}
 
   @ApiBody({ type: LoginRequest })

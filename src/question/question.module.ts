@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { QuestionSet } from '../entities/question-set.entity';
-import { QuestionsController } from './questions.controller';
-import { QuestionsService } from './questions.service';
+import { QuestionController } from './question.controller';
+import { QuestionService } from './question.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([QuestionSet])],
-  controllers: [QuestionsController],
-  providers: [QuestionsService],
+  controllers: [QuestionController],
+  providers: [QuestionService],
 })
-export class QuestionsModule {}
+export class QuestionModule {}

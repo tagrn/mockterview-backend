@@ -14,7 +14,7 @@ import {
 import { QuestionSummarySchema } from './schemas/question-summary.schema';
 
 @Injectable()
-export class QuestionsService {
+export class QuestionService {
   constructor(
     @InjectRepository(QuestionSet)
     private readonly questionSetRepository: Repository<QuestionSet>,
