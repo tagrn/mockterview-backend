@@ -25,7 +25,7 @@ export class QuestionController {
 
   @Get('basic')
   async getBasicQuestionSummariesApi(): Promise<QuestionSummaryResponse[]> {
-    const questionSummaries = await this.questionService.getBasicQuestionsApi();
+    const questionSummaries = await this.questionService.getBasicQuestions();
     return questionSummaries.map(
       (qs) => new QuestionSummaryResponse(qs.id, qs.title),
     );

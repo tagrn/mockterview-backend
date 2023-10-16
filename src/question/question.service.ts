@@ -20,7 +20,7 @@ export class QuestionService {
     private readonly questionSetRepository: Repository<QuestionSet>,
   ) {}
 
-  async getBasicQuestionsApi(): Promise<QuestionSummarySchema[]> {
+  async getBasicQuestions(): Promise<QuestionSummarySchema[]> {
     const questionSet1 = await this.questionSetRepository.findOneBy({ id: 1 });
     const questionSet2 = await this.questionSetRepository.findOneBy({ id: 2 });
     return [
