@@ -1,10 +1,11 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { QuestionSet } from '../entities/question-set.entity';
 import {
   QuestionSetSchema,
@@ -72,5 +73,17 @@ export class QuestionsService {
       isPrivate: newQuestionSet.isPrivate,
     });
     return questionSet.id;
+  }
+
+  async deleteQuestionSet(questionSetId: number): Promise<number> {
+    const deleteResult: DeleteResult = await this.questionSetRepository.delete({
+      id: questionSetId,
+    });
+
+    if (!deleteResult.affected) {
+      throw new BadRequestException();
+    }
+
+    return questionSetId;
   }
 }

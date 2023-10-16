@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -75,5 +76,15 @@ export class QuestionsController {
       user.id,
       new UnsavedQuestionSetSchema(title, questions, isPrivate),
     );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
+  @Delete('/:id')
+  async deleteQuestionsApi(
+    @AuthorizedUser() user: UserSchema,
+    @Param('id', ParseIntPipe) questionSetId: number,
+  ): Promise<number> {
+    return await this.questionsService.deleteQuestionSet(questionSetId);
   }
 }
