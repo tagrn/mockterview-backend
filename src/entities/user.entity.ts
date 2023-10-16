@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { QuestionSet } from './question-set.entity';
+import { QuestionSetViewCount } from './question-set-view-count';
 
 @Index('email', ['email'], { unique: true })
 @Entity()
@@ -31,6 +32,9 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date | null;
 
-  @OneToMany(() => QuestionSet, (qs) => qs.userId)
+  @OneToMany(() => QuestionSet, (qs) => qs.userId, { lazy: true })
   QuestionSets: QuestionSet[];
+
+  @OneToMany(() => QuestionSetViewCount, (qsvc) => qsvc.userId, { lazy: true })
+  questionSetViewCounts: QuestionSetViewCount[];
 }

@@ -5,10 +5,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
+import { QuestionSetViewCount } from './question-set-view-count';
 
 interface QuestionList {
   questions: string[];
@@ -43,7 +45,13 @@ export class QuestionSet {
   @ManyToOne(() => User, (user) => user.QuestionSets, {
     onDelete: 'NO ACTION',
     onUpdate: 'CASCADE',
+    lazy: true,
   })
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
+
+  @OneToMany(() => QuestionSetViewCount, (qsvc) => qsvc.questionSetId, {
+    lazy: true,
+  })
+  questionSetViewCounts: QuestionSetViewCount[];
 }
