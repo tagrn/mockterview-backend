@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { QuestionSet } from './question-set.entity';
 import { QuestionSetViewCount } from './question-set-view-count';
+import { UserRole } from 'src/question/enums/user-role.enum';
 
 @Index('email', ['email'], { unique: true })
 @Entity()
@@ -22,6 +23,9 @@ export class User {
 
   @Column('varchar', { name: 'nickname', length: 12, default: '초보 면접자' })
   nickname: string;
+
+  @Column('varchar', { length: 8, default: 'GENERAL' })
+  role: UserRole;
 
   @CreateDateColumn()
   createdAt: Date;
