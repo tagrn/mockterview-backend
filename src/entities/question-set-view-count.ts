@@ -35,6 +35,6 @@ export class QuestionSetViewCount {
     onUpdate: 'CASCADE',
     lazy: true,
   })
-  @JoinColumn({ name: 'quetionSetId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'questionSetId', referencedColumnName: 'id' })
   questionSet: QuestionSet;
 }
