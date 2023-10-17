@@ -1,6 +1,5 @@
 import {
   Controller,
-  ParseIntPipe,
   Post,
   Query,
   UploadedFile,
@@ -8,7 +7,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AuthorizedUser } from 'src/auth/auth.decorator';
 import { JWTAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserSchema } from 'src/user/schemas/user.schema';
@@ -17,6 +16,7 @@ import { VideoRequest } from './\brequests/video.request';
 import { VideoSchema } from './schemas/video.schema';
 import { VideoService } from './video.service';
 
+@ApiTags('VIDEO')
 @Controller('video')
 export class VideoController {
   constructor(private readonly videoService: VideoService) {}
