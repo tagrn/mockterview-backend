@@ -1,8 +1,8 @@
 import {
   Controller,
-  Param,
   ParseIntPipe,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -26,21 +26,20 @@ export class VideoController {
   @UseInterceptors(FileInterceptor('video'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'S3 데이터에 저장',
+    description: 'S3 스토리지에 비디오 저장',
     type: VideoRequest,
   })
   @Post('/upload')
   async uploadVideoApi(
     @AuthorizedUser() user: UserSchema,
-    @Param('questionSetId', ParseIntPipe) questionSetId: number,
-    @Param('question') question: string,
+    @Query('question') question: string,
     @UploadedFile() video,
   ): Promise<number> {
     const fileName = `${user.id}-${v4()}`;
     await this.videoService.uploadVideoToS3(fileName, video);
 
     return await this.videoService.saveVideo(
-      new VideoSchema(user.id, questionSetId, question, fileName),
+      new VideoSchema(user.id, question, fileName),
     );
   }
 }

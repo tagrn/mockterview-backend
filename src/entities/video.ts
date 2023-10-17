@@ -5,19 +5,13 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { QuestionSetViewCount } from './question-set-view-count';
 import { User } from './user.entity';
 
-interface QuestionList {
-  questions: string[];
-}
-
 @Entity()
-export class QuestionSet {
+export class Video {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
@@ -25,13 +19,10 @@ export class QuestionSet {
   userId: number;
 
   @Column('varchar')
-  title: string;
+  question: string;
 
-  @Column('json')
-  questions: QuestionList;
-
-  @Column('boolean')
-  isPrivate: boolean;
+  @Column('varchar')
+  fileName: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -42,16 +33,11 @@ export class QuestionSet {
   @DeleteDateColumn()
   deletedAt: Date | null;
 
-  @ManyToOne(() => User, (user) => user.QuestionSets, {
+  @ManyToOne(() => User, (user) => user.videos, {
     onDelete: 'NO ACTION',
     onUpdate: 'CASCADE',
     lazy: true,
   })
-  @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
-
-  @OneToMany(() => QuestionSetViewCount, (qsvc) => qsvc.questionSetId, {
-    lazy: true,
-  })
-  questionSetViewCounts: QuestionSetViewCount[];
 }

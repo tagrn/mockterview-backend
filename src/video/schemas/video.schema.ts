@@ -1,18 +1,11 @@
 export class VideoSchema {
   public userId: number;
-  public questionSetId: number;
   public question: string;
-  public videoUrl: string;
+  public fileName: string;
 
-  constructor(
-    userId: number,
-    questionSetId: number,
-    question: string,
-    videoUrl: string,
-  ) {
+  constructor(userId: number, question: string, fileName: string) {
     this.userId = userId;
-    this.questionSetId = questionSetId;
     this.question = question;
-    this.videoUrl = videoUrl;
+    this.fileName = fileName;
   }
 }

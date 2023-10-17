@@ -10,6 +10,8 @@ import { User } from './entities/user.entity';
 import { QuestionModule } from './question/question.module';
 import { UserModule } from './user/user.module';
 import { VideoModule } from './video/video.module';
+import { AwsModule } from './aws/aws.module';
+import { Video } from './entities/video';
 
 @Module({
   imports: [
@@ -26,13 +28,14 @@ import { VideoModule } from './video/video.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DATABASE'),
-        entities: [User, QuestionSet, QuestionSetViewCount, News],
+        entities: [User, QuestionSet, QuestionSetViewCount, News, Video],
         synchronize: false,
         charset: 'utf8mb4',
       }),
       inject: [ConfigService],
     }),
     VideoModule,
+    AwsModule,
   ],
   controllers: [AppController],
 })

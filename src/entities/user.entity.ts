@@ -1,3 +1,4 @@
+import { UserRole } from 'src/question/enums/user-role.enum';
 import {
   Column,
   CreateDateColumn,
@@ -8,9 +9,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { QuestionSet } from './question-set.entity';
 import { QuestionSetViewCount } from './question-set-view-count';
-import { UserRole } from 'src/question/enums/user-role.enum';
+import { QuestionSet } from './question-set.entity';
+import { Video } from './video';
 
 @Index('email', ['email'], { unique: true })
 @Entity()
@@ -41,4 +42,9 @@ export class User {
 
   @OneToMany(() => QuestionSetViewCount, (qsvc) => qsvc.userId, { lazy: true })
   questionSetViewCounts: QuestionSetViewCount[];
+
+  @OneToMany(() => Video, (video) => video.userId, {
+    lazy: true,
+  })
+  videos: Video[];
 }
