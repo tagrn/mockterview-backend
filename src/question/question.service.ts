@@ -24,8 +24,18 @@ export class QuestionService {
     const questionSet1 = await this.questionSetRepository.findOneBy({ id: 1 });
     const questionSet2 = await this.questionSetRepository.findOneBy({ id: 2 });
     return [
-      new QuestionSummarySchema(questionSet1.id, questionSet1.title),
-      new QuestionSummarySchema(questionSet2.id, questionSet2.title),
+      new QuestionSummarySchema(
+        questionSet1.id,
+        questionSet1.title,
+        questionSet1.questions.questions.length,
+        questionSet1.updatedAt,
+      ),
+      new QuestionSummarySchema(
+        questionSet2.id,
+        questionSet2.title,
+        questionSet2.questions.questions.length,
+        questionSet2.updatedAt,
+      ),
     ];
   }
 
@@ -33,7 +43,15 @@ export class QuestionService {
     userId: number,
   ): Promise<QuestionSummarySchema[]> {
     const questionSets = await this.questionSetRepository.findBy({ userId });
-    return questionSets.map((qs) => new QuestionSummarySchema(qs.id, qs.title));
+    return questionSets.map(
+      (qs) =>
+        new QuestionSummarySchema(
+          qs.id,
+          qs.title,
+          qs.questions.questions.length,
+          qs.updatedAt,
+        ),
+    );
   }
 
   async getQuestionSetByIdAndUserId(

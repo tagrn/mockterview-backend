@@ -27,7 +27,13 @@ export class QuestionController {
   async getBasicQuestionSummariesApi(): Promise<QuestionSummaryResponse[]> {
     const questionSummaries = await this.questionService.getBasicQuestions();
     return questionSummaries.map(
-      (qs) => new QuestionSummaryResponse(qs.id, qs.title),
+      (qs) =>
+        new QuestionSummaryResponse(
+          qs.id,
+          qs.title,
+          qs.questionCount,
+          qs.updatedAt,
+        ),
     );
   }
 
@@ -40,7 +46,13 @@ export class QuestionController {
     const questionSummaries =
       await this.questionService.getQuestionSummariesByUserId(user.id);
     return questionSummaries.map(
-      (qs) => new QuestionSummaryResponse(qs.id, qs.title),
+      (qs) =>
+        new QuestionSummaryResponse(
+          qs.id,
+          qs.title,
+          qs.questionCount,
+          qs.updatedAt,
+        ),
     );
   }
 
