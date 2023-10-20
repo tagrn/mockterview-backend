@@ -33,7 +33,7 @@ export class VideoController {
   async uploadVideoApi(
     @AuthorizedUser() user: UserSchema,
     @Query('question') question: string,
-    @UploadedFile() video,
+    @UploadedFile() video: Express.Multer.File,
   ): Promise<number> {
     const fileName = `${user.id}-${v4()}`;
     await this.videoService.uploadVideoToS3(fileName, video);

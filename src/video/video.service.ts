@@ -4,11 +4,11 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { AwsService } from 'src/aws/aws.service';
-import { VideoSchema } from './schemas/video.schema';
-import { Video } from 'src/entities/video';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AwsService } from 'src/aws/aws.service';
+import { Video } from 'src/entities/video';
 import { Repository } from 'typeorm';
+import { VideoSchema } from './schemas/video.schema';
 
 @Injectable()
 export class VideoService {
@@ -18,8 +18,11 @@ export class VideoService {
     private readonly videoRepository: Repository<Video>,
   ) {}
 
-  async uploadVideoToS3(fileName: string, video: any): Promise<void> {
-    const params = await this.awsService.getS3Params(fileName, String(video));
+  async uploadVideoToS3(
+    fileName: string,
+    video: Express.Multer.File,
+  ): Promise<void> {
+    const params = await this.awsService.getS3Params(fileName, video.buffer);
     const s3Client = await this.awsService.getConfiguredS3Client();
     try {
       await s3Client.send(new PutObjectCommand(params));
