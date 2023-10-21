@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Get,
   Post,
@@ -18,6 +19,10 @@ import { VideoRequest } from './\brequests/video.request';
 import { VideoResponse } from './responses/video.response';
 import { UnsavedVideoSchema } from './schemas/video.schema';
 import { VideoService } from './video.service';
+import { use } from 'passport';
+import { MAX_VIDEO_COUNT } from './enums/max-video-count.enum';
+import { maxVideoCountValidate } from './validations/max-video-count.validation';
+import { UserRole } from 'src/question/enums/user-role.enum';
 
 @ApiTags('VIDEO')
 @Controller('videos')
@@ -72,6 +77,9 @@ export class VideoController {
     @Query('question') question: string,
     @UploadedFile() video: Express.Multer.File,
   ): Promise<number> {
+    const videoCount = await this.videoService.getVideoCount(user.id);
+    await maxVideoCountValidate(videoCount, UserRole.GENERAL);
+
     const fileName = `${user.id}-${v4()}`;
     await this.videoService.uploadVideoToS3(fileName, video);
 

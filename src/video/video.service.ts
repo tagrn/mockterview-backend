@@ -29,6 +29,10 @@ export class VideoService {
     );
   }
 
+  async getVideoCount(userId: number): Promise<number> {
+    return await this.videoRepository.countBy({ userId });
+  }
+
   async getVideos(userId: number): Promise<VideoSchema[]> {
     const videos = await this.videoRepository.findBy({ userId });
     return videos.map(

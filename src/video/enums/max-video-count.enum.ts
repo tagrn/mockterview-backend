@@ -1,0 +1,6 @@
+export enum MAX_VIDEO_COUNT {
+  GENERAL = 5,
+  STANDARD = 100,
+  PREMIUM = 10e9,
+  ADMIN = 10e9,
+}
