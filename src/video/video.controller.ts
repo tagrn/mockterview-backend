@@ -13,7 +13,6 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { v4 } from 'uuid';
 import { AuthorizedUser } from '../auth/auth.decorator';
 import { JWTAuthGuard } from '../auth/jwt-auth.guard';
-import { UserRole } from '../user/enums/user-role.enum';
 import { UserSchema } from '../user/schemas/user.schema';
 import { VideoRequest } from './\brequests/video.request';
 import { VideoResponse } from './responses/video.response';
@@ -75,7 +74,7 @@ export class VideoController {
     @UploadedFile() video: Express.Multer.File,
   ): Promise<number> {
     const videoCount = await this.videoService.getVideoCount(user.id);
-    await maxVideoCountValidate(videoCount, UserRole.GENERAL);
+    await maxVideoCountValidate(videoCount, user.role);
 
     const fileName = `${user.id}-${v4()}`;
     await this.videoService.uploadVideoToS3(fileName, video);
