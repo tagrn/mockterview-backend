@@ -16,7 +16,7 @@ export class AwsService {
     });
   }
 
-  async getS3Params(fileName: string, data: any): Promise<PutObjectRequest> {
+  async getS3PutParams(fileName: string, data: any): Promise<PutObjectRequest> {
     return {
       Bucket: this.configService.get('S3_BUCKET'),
       Key: fileName,
