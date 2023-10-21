@@ -13,7 +13,7 @@ export class UserService {
 
   async saveUser(email: string) {
     const user = await this.userRepository.save({ email });
-    return new UserSchema(user.id, user.email, user.nickname);
+    return new UserSchema(user.id, user.email, user.role, user.nickname);
   }
 
   async getUserByEmail(email: string): Promise<UserSchema | null> {
@@ -21,6 +21,6 @@ export class UserService {
     if (!user) {
       return null;
     }
-    return new UserSchema(user.id, user.email, user.nickname);
+    return new UserSchema(user.id, user.email, user.role, user.nickname);
   }
 }

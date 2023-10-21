@@ -1,4 +1,5 @@
 export enum UserRole {
+  NONUSER = 'NONUSER',
   GENERAL = 'GENERAL',
   STANDARD = 'STANDARD',
   PREMIUM = 'PREMIUM',
