@@ -1,4 +1,3 @@
-import { UserRole } from 'src/question/enums/user-role.enum';
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserRole } from '../user/enums/user-role.enum';
 import { QuestionSetViewCount } from './question-set-view-count';
 import { QuestionSet } from './question-set.entity';
 import { Video } from './video';

@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   Get,
   Post,
@@ -11,18 +10,16 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { AuthorizedUser } from 'src/auth/auth.decorator';
-import { JWTAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UserSchema } from 'src/user/schemas/user.schema';
 import { v4 } from 'uuid';
+import { AuthorizedUser } from '../auth/auth.decorator';
+import { JWTAuthGuard } from '../auth/jwt-auth.guard';
+import { UserRole } from '../user/enums/user-role.enum';
+import { UserSchema } from '../user/schemas/user.schema';
 import { VideoRequest } from './\brequests/video.request';
 import { VideoResponse } from './responses/video.response';
 import { UnsavedVideoSchema } from './schemas/video.schema';
-import { VideoService } from './video.service';
-import { use } from 'passport';
-import { MAX_VIDEO_COUNT } from './enums/max-video-count.enum';
 import { maxVideoCountValidate } from './validations/max-video-count.validation';
-import { UserRole } from 'src/question/enums/user-role.enum';
+import { VideoService } from './video.service';
 
 @ApiTags('VIDEO')
 @Controller('videos')

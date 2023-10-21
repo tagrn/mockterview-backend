@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import { UserRole } from 'src/question/enums/user-role.enum';
+import { UserRole } from '../../user/enums/user-role.enum';
 import { MAX_VIDEO_COUNT } from '../enums/max-video-count.enum';
 
 export const maxVideoCountValidate = async (
