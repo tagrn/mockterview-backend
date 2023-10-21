@@ -19,6 +19,9 @@ export class Video {
   userId: number;
 
   @Column('varchar')
+  questionSetTitle: string;
+
+  @Column('varchar')
   question: string;
 
   @Column('varchar')

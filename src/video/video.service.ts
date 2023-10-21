@@ -23,6 +23,7 @@ export class VideoService {
     return new VideoSchema(
       video.id,
       video.userId,
+      video.questionSetTitle,
       video.question,
       video.fileName,
     );

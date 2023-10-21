@@ -48,6 +48,7 @@ export class VideoController {
   @Post('/upload')
   async uploadVideoApi(
     @AuthorizedUser() user: UserSchema,
+    @Query('question-set-title') questionSetTitle: string,
     @Query('question') question: string,
     @UploadedFile() video: Express.Multer.File,
   ): Promise<number> {
@@ -55,7 +56,7 @@ export class VideoController {
     await this.videoService.uploadVideoToS3(fileName, video);
 
     return await this.videoService.saveVideo(
-      new UnsavedVideoSchema(user.id, question, fileName),
+      new UnsavedVideoSchema(user.id, questionSetTitle, question, fileName),
     );
   }
 }
