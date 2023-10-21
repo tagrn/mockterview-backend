@@ -29,6 +29,20 @@ export class VideoService {
     );
   }
 
+  async getVideos(userId: number): Promise<VideoSchema[]> {
+    const videos = await this.videoRepository.findBy({ userId });
+    return videos.map(
+      (video) =>
+        new VideoSchema(
+          video.id,
+          video.userId,
+          video.questionSetTitle,
+          video.question,
+          video.fileName,
+        ),
+    );
+  }
+
   async saveVideo(videoSchema: UnsavedVideoSchema) {
     const video = await this.videoRepository.save({
       ...videoSchema,

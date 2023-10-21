@@ -7,6 +7,7 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { AuthorizedUser } from 'src/auth/auth.decorator';
@@ -14,17 +15,36 @@ import { JWTAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserSchema } from 'src/user/schemas/user.schema';
 import { v4 } from 'uuid';
 import { VideoRequest } from './\brequests/video.request';
+import { VideoResponse } from './responses/video.response';
 import { UnsavedVideoSchema } from './schemas/video.schema';
 import { VideoService } from './video.service';
-import { ConfigService } from '@nestjs/config';
 
 @ApiTags('VIDEO')
-@Controller('video')
+@Controller('videos')
 export class VideoController {
   constructor(
     private readonly videoService: VideoService,
     private readonly configService: ConfigService,
   ) {}
+
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
+  @Get('/')
+  async getVideosApi(
+    @AuthorizedUser() user: UserSchema,
+  ): Promise<VideoResponse[]> {
+    const videoSchemas = await this.videoService.getVideos(user.id);
+    return videoSchemas.map(
+      (videoSchema) =>
+        new VideoResponse(
+          videoSchema.id,
+          videoSchema.userId,
+          videoSchema.questionSetTitle,
+          videoSchema.question,
+          videoSchema.fileName,
+        ),
+    );
+  }
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
