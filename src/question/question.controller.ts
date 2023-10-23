@@ -32,6 +32,7 @@ export class QuestionController {
           qs.id,
           qs.title,
           qs.questionCount,
+          qs.viewCount,
           qs.updatedAt,
         ),
     );
@@ -51,6 +52,7 @@ export class QuestionController {
           qs.id,
           qs.title,
           qs.questionCount,
+          qs.viewCount,
           qs.updatedAt,
         ),
     );

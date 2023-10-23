@@ -53,12 +53,14 @@ export class QuestionService {
         questionSet1.id,
         questionSet1.title,
         questionSet1.questions.questions.length,
+        await this.getQuestionSetViewCount(questionSet1.id),
         questionSet1.updatedAt,
       ),
       new QuestionSummarySchema(
         questionSet2.id,
         questionSet2.title,
         questionSet2.questions.questions.length,
+        await this.getQuestionSetViewCount(questionSet2.id),
         questionSet2.updatedAt,
       ),
     ];
@@ -90,18 +92,38 @@ export class QuestionService {
     );
   }
 
+  async getQuestionSetViewCount(questionSetId: number) {
+    const result = await this.questionSetRepository
+      .createQueryBuilder('questionSet')
+      .where('questionSet.id = :questionSetId', { questionSetId })
+      .leftJoinAndSelect(
+        'questionSet.questionSetViewCounts',
+        'questionSetViewCounts',
+      )
+      .select('sum(questionSetViewCounts.count)', 'totalViewCount')
+      .getRawOne();
+
+    return Number(result.totalViewCount);
+  }
+
   async getQuestionSummariesByUserId(
     userId: number,
   ): Promise<QuestionSummarySchema[]> {
-    const questionSets = await this.questionSetRepository.findBy({ userId });
-    return questionSets.map(
-      (qs) =>
-        new QuestionSummarySchema(
-          qs.id,
-          qs.title,
-          qs.questions.questions.length,
-          qs.updatedAt,
-        ),
+    const questionSets = await this.questionSetRepository.find({
+      where: { userId },
+      order: { id: 'DESC' },
+    });
+    return await Promise.all(
+      questionSets.map(
+        async (qs) =>
+          new QuestionSummarySchema(
+            qs.id,
+            qs.title,
+            qs.questions.questions.length,
+            await this.getQuestionSetViewCount(qs.id),
+            qs.updatedAt,
+          ),
+      ),
     );
   }
 }
