@@ -50,8 +50,9 @@ export class QuestionSet {
   @JoinColumn([{ name: 'userId', referencedColumnName: 'id' }])
   user: User;
 
-  @OneToMany(() => QuestionSetViewCount, (qsvc) => qsvc.questionSetId, {
+  @OneToMany(() => QuestionSetViewCount, (qsvc) => qsvc.questionSet, {
     lazy: true,
   })
+  @JoinColumn([{ name: 'id', referencedColumnName: 'questionSetId' }])
   questionSetViewCounts: QuestionSetViewCount[];
 }

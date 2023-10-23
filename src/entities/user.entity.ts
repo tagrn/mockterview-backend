@@ -4,6 +4,7 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -37,14 +38,17 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date | null;
 
-  @OneToMany(() => QuestionSet, (qs) => qs.userId, { lazy: true })
+  @OneToMany(() => QuestionSet, (qs) => qs.user, { lazy: true })
+  @JoinColumn([{ name: 'id', referencedColumnName: 'userId' }])
   QuestionSets: QuestionSet[];
 
-  @OneToMany(() => QuestionSetViewCount, (qsvc) => qsvc.userId, { lazy: true })
+  @OneToMany(() => QuestionSetViewCount, (qsvc) => qsvc.user, { lazy: true })
+  @JoinColumn([{ name: 'id', referencedColumnName: 'userId' }])
   questionSetViewCounts: QuestionSetViewCount[];
 
-  @OneToMany(() => Video, (video) => video.userId, {
+  @OneToMany(() => Video, (video) => video.user, {
     lazy: true,
   })
+  @JoinColumn([{ name: 'id', referencedColumnName: 'userId' }])
   videos: Video[];
 }
