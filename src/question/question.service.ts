@@ -20,6 +20,31 @@ export class QuestionService {
     private readonly questionSetRepository: Repository<QuestionSet>,
   ) {}
 
+  async createQuestionSet(
+    userId: number,
+    newQuestionSet: UnsavedQuestionSetSchema,
+  ): Promise<number> {
+    const questionSet = await this.questionSetRepository.save({
+      userId,
+      title: newQuestionSet.title,
+      questions: { questions: newQuestionSet.questions },
+      isPrivate: newQuestionSet.isPrivate,
+    });
+    return questionSet.id;
+  }
+
+  async deleteQuestionSet(questionSetId: number): Promise<number> {
+    const deleteResult: DeleteResult = await this.questionSetRepository.delete({
+      id: questionSetId,
+    });
+
+    if (!deleteResult.affected) {
+      throw new BadRequestException();
+    }
+
+    return questionSetId;
+  }
+
   async getBasicQuestions(): Promise<QuestionSummarySchema[]> {
     const questionSet1 = await this.questionSetRepository.findOneBy({ id: 1 });
     const questionSet2 = await this.questionSetRepository.findOneBy({ id: 2 });
@@ -37,21 +62,6 @@ export class QuestionService {
         questionSet2.updatedAt,
       ),
     ];
-  }
-
-  async getQuestionSummariesByUserId(
-    userId: number,
-  ): Promise<QuestionSummarySchema[]> {
-    const questionSets = await this.questionSetRepository.findBy({ userId });
-    return questionSets.map(
-      (qs) =>
-        new QuestionSummarySchema(
-          qs.id,
-          qs.title,
-          qs.questions.questions.length,
-          qs.updatedAt,
-        ),
-    );
   }
 
   async getQuestionSetByIdAndUserId(
@@ -80,28 +90,18 @@ export class QuestionService {
     );
   }
 
-  async createQuestionSet(
+  async getQuestionSummariesByUserId(
     userId: number,
-    newQuestionSet: UnsavedQuestionSetSchema,
-  ): Promise<number> {
-    const questionSet = await this.questionSetRepository.save({
-      userId,
-      title: newQuestionSet.title,
-      questions: { questions: newQuestionSet.questions },
-      isPrivate: newQuestionSet.isPrivate,
-    });
-    return questionSet.id;
-  }
-
-  async deleteQuestionSet(questionSetId: number): Promise<number> {
-    const deleteResult: DeleteResult = await this.questionSetRepository.delete({
-      id: questionSetId,
-    });
-
-    if (!deleteResult.affected) {
-      throw new BadRequestException();
-    }
-
-    return questionSetId;
+  ): Promise<QuestionSummarySchema[]> {
+    const questionSets = await this.questionSetRepository.findBy({ userId });
+    return questionSets.map(
+      (qs) =>
+        new QuestionSummarySchema(
+          qs.id,
+          qs.title,
+          qs.questions.questions.length,
+          qs.updatedAt,
+        ),
+    );
   }
 }
