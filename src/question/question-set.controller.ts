@@ -3,8 +3,10 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -12,16 +14,19 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthorizedUser } from '../auth/auth.decorator';
 import { JWTAuthGuard, UnsafeJWTAuthGuard } from '../auth/jwt-auth.guard';
 import { UserSchema } from '../user/schemas/user.schema';
-import { QuestionService } from './question.service';
+import { QuestionSetService } from './question-set.service';
 import { QuestionSetRequest } from './requests/question-set.request';
 import { QuestionSetResponse } from './responses/question-set.response';
 import { QuestionSummaryResponse } from './responses/question-summary.response';
-import { UnsavedQuestionSetSchema } from './schemas/question-set.schema';
+import {
+  QuestionSetSchema,
+  UnsavedQuestionSetSchema,
+} from './schemas/question-set.schema';
 
 @ApiTags('QUESTION')
-@Controller('questions')
-export class QuestionController {
-  constructor(private readonly questionService: QuestionService) {}
+@Controller('question-sets')
+export class QuestionSetController {
+  constructor(private readonly questionService: QuestionSetService) {}
 
   @Get('basic')
   async getBasicQuestionSummariesApi(): Promise<QuestionSummaryResponse[]> {
@@ -79,6 +84,22 @@ export class QuestionController {
 
   @ApiBearerAuth()
   @UseGuards(JWTAuthGuard)
+  @Patch('/:id')
+  async patchuestionsApi(
+    @AuthorizedUser() user: UserSchema,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() questionSetRequest: QuestionSetRequest,
+  ): Promise<number> {
+    const { title, questions, isPrivate } = { ...questionSetRequest };
+    return await this.questionService.updateQuestionSet(
+      user.id,
+      new QuestionSetSchema(id, title, questions, isPrivate),
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JWTAuthGuard)
+  @HttpCode(201)
   @Post()
   async postQuestionsApi(
     @AuthorizedUser() user: UserSchema,

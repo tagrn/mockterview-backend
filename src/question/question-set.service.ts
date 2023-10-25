@@ -14,7 +14,7 @@ import {
 import { QuestionSummarySchema } from './schemas/question-summary.schema';
 
 @Injectable()
-export class QuestionService {
+export class QuestionSetService {
   constructor(
     @InjectRepository(QuestionSet)
     private readonly questionSetRepository: Repository<QuestionSet>,
@@ -125,5 +125,19 @@ export class QuestionService {
           ),
       ),
     );
+  }
+
+  async updateQuestionSet(
+    userId: number,
+    newQuestionSet: QuestionSetSchema,
+  ): Promise<number> {
+    const questionSet = await this.questionSetRepository.save({
+      userId,
+      id: newQuestionSet.id,
+      title: newQuestionSet.title,
+      questions: { questions: newQuestionSet.questions },
+      isPrivate: newQuestionSet.isPrivate,
+    });
+    return questionSet.id;
   }
 }
