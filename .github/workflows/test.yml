@@ -1,0 +1,22 @@
+name: Unit Test
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: test
+    runs-on: [self-hosted]
+    strategy:
+      matrix:
+        node-version: [18.17.0]
+    steps:
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Nest.js test
+        run: |
+          yarn install
+          yarn test
