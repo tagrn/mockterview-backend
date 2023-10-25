@@ -12,6 +12,8 @@ jobs:
       matrix:
         node-version: [18.17.0]
     steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
