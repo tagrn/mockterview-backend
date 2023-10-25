@@ -64,7 +64,7 @@ describe('UserService', () => {
 
       expect(result.id).toBe(1);
       expect(result.email).toBe(mockEmail);
-      expect(result.nickname).toBe(mockNickname + 'ㅁㄴㅇ');
+      expect(result.nickname).toBe(mockNickname);
     });
 
     it('존재하지 않는 이메일이 들어갔을 경우', async () => {
