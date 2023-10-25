@@ -1,13 +1,16 @@
 import {
   Body,
   Controller,
+  DefaultValuePipe,
   Delete,
   Get,
   HttpCode,
   Param,
+  ParseBoolPipe,
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -69,11 +72,16 @@ export class QuestionSetController {
   async getQuestionSetApi(
     @AuthorizedUser() user: UserSchema,
     @Param('id', ParseIntPipe) id: number,
+    @Query('view', new DefaultValuePipe(false), ParseBoolPipe)
+    isViewing: boolean,
   ): Promise<QuestionSetResponse> {
     const questionSet = await this.questionService.getQuestionSetByIdAndUserId(
-      id,
       user.id,
+      id,
     );
+    if (isViewing) {
+      await this.questionService.increaseViewCount(user.id, id);
+    }
     return new QuestionSetResponse(
       questionSet.id,
       questionSet.title,

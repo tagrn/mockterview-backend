@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QuestionSetViewCount } from 'src/entities/question-set-view-count';
 import { DeleteResult, Repository } from 'typeorm';
 import { QuestionSet } from '../entities/question-set.entity';
 import {
@@ -16,6 +17,8 @@ import { QuestionSummarySchema } from './schemas/question-summary.schema';
 @Injectable()
 export class QuestionSetService {
   constructor(
+    @InjectRepository(QuestionSetViewCount)
+    private readonly questionSetViewCountRepository: Repository<QuestionSetViewCount>,
     @InjectRepository(QuestionSet)
     private readonly questionSetRepository: Repository<QuestionSet>,
   ) {}
@@ -67,8 +70,8 @@ export class QuestionSetService {
   }
 
   async getQuestionSetByIdAndUserId(
-    questionsSetId: number,
     userId: number,
+    questionsSetId: number,
   ): Promise<QuestionSetSchema> {
     const questionSet: QuestionSet = await this.questionSetRepository.findOneBy(
       {
@@ -125,6 +128,23 @@ export class QuestionSetService {
           ),
       ),
     );
+  }
+
+  async increaseViewCount(userId: number, questionSetId: number) {
+    const qsvc = await this.questionSetViewCountRepository.findOneBy({
+      userId,
+      questionSetId,
+    });
+    if (qsvc) {
+      qsvc.count++;
+      await this.questionSetViewCountRepository.save(qsvc);
+    } else {
+      await this.questionSetViewCountRepository.save({
+        userId,
+        questionSetId,
+        count: 1,
+      });
+    }
   }
 
   async updateQuestionSet(
