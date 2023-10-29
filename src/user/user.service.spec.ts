@@ -50,6 +50,9 @@ describe('UserService', () => {
 
       const result = await service.saveUser(mockEmail);
 
+      expect(userRepository.save).toHaveBeenCalledTimes(1);
+      expect(userRepository.save).toHaveBeenCalledWith({ email: mockEmail });
+
       expect(result.id).toBe(1);
       expect(result.email).toBe(mockEmail);
       expect(result.nickname).toBe(mockNickname);
@@ -62,6 +65,11 @@ describe('UserService', () => {
 
       const result = await service.getUserByEmail(mockEmail);
 
+      expect(userRepository.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({
+        email: mockEmail,
+      });
+
       expect(result.id).toBe(1);
       expect(result.email).toBe(mockEmail);
       expect(result.nickname).toBe(mockNickname);
@@ -71,6 +79,11 @@ describe('UserService', () => {
       jest.spyOn(userRepository, 'findOneBy').mockResolvedValue(null);
 
       const result = await service.getUserByEmail(mockEmail);
+
+      expect(userRepository.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepository.findOneBy).toHaveBeenCalledWith({
+        email: mockEmail,
+      });
 
       expect(result).toBe(null);
     });
