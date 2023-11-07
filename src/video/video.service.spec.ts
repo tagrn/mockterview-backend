@@ -48,15 +48,15 @@ describe('VideoService', () => {
   });
 
   describe('getVideo', () => {
-    it('정상적인 id와 유저 id가 들어갔을 경우', async () => {
+    it('존재하는 id와 정상적인 유저 id가 들어갔을 경우', async () => {
       jest.spyOn(videoRepository, 'findOneBy').mockResolvedValue(mockVideo);
 
-      const result = await service.getVideo(1, 1);
+      const result = await service.getVideo(id, userId);
 
       expect(videoRepository.findOneBy).toHaveBeenCalledTimes(1);
       expect(videoRepository.findOneBy).toHaveBeenCalledWith({
-        id: 1,
-        userId: 1,
+        id,
+        userId,
       });
 
       expect(result.id).toBe(id);
@@ -64,6 +64,94 @@ describe('VideoService', () => {
       expect(result.question).toBe(question);
       expect(result.questionSetTitle).toBe(questionSetTitle);
       expect(result.fileName).toBe(fileName);
+    });
+
+    it('존재하는 id와 비정상적인 유저 id가 들어갔을 경우', async () => {
+      jest.spyOn(videoRepository, 'findOneBy').mockResolvedValue(null);
+
+      const wrongUserId = 999999;
+      const result = await service.getVideo(id, wrongUserId);
+
+      expect(videoRepository.findOneBy).toHaveBeenCalledTimes(1);
+      expect(videoRepository.findOneBy).toHaveBeenCalledWith({
+        id,
+        userId: wrongUserId,
+      });
+
+      expect(result).toBe(null);
+    });
+
+    it('존재하지 않는 id와 정상적인 유저 id가 들어갔을 경우', async () => {
+      jest.spyOn(videoRepository, 'findOneBy').mockResolvedValue(null);
+
+      const wrongVideoId = 888888;
+      const result = await service.getVideo(wrongVideoId, 1);
+
+      expect(videoRepository.findOneBy).toHaveBeenCalledTimes(1);
+      expect(videoRepository.findOneBy).toHaveBeenCalledWith({
+        id: wrongVideoId,
+        userId: 1,
+      });
+
+      expect(result).toBe(null);
+    });
+
+    it('존재하지 않는 id와 비정상적인 유저 id가 들어갔을 경우', async () => {
+      jest.spyOn(videoRepository, 'findOneBy').mockResolvedValue(null);
+
+      const wrongVideoId = 888888;
+      const wrongUserId = 999999;
+      const result = await service.getVideo(wrongVideoId, wrongUserId);
+
+      expect(videoRepository.findOneBy).toHaveBeenCalledTimes(1);
+      expect(videoRepository.findOneBy).toHaveBeenCalledWith({
+        id: wrongVideoId,
+        userId: wrongUserId,
+      });
+
+      expect(result).toBe(null);
+    });
+  });
+
+  describe('getVideoCount', () => {
+    it('존재하는 유저 id가 들어갔을 경우', async () => {
+      jest.spyOn(videoRepository, 'countBy').mockResolvedValue(2);
+
+      const result = await service.getVideoCount(userId);
+
+      expect(videoRepository.countBy).toHaveBeenCalledTimes(1);
+      expect(videoRepository.countBy).toHaveBeenCalledWith({
+        userId,
+      });
+
+      expect(result).toBe(2);
+    });
+
+    it('존재하지 않는 유저 id가 들어갔을 경우', async () => {
+      jest.spyOn(videoRepository, 'countBy').mockResolvedValue(0);
+
+      const wrongUserId = 999999;
+      const result = await service.getVideoCount(wrongUserId);
+
+      expect(videoRepository.countBy).toHaveBeenCalledTimes(1);
+      expect(videoRepository.countBy).toHaveBeenCalledWith({
+        userId: wrongUserId,
+      });
+
+      expect(result).toBe(0);
+    });
+
+    it('영상 저장을 하나도 하지 않은 경우', async () => {
+      jest.spyOn(videoRepository, 'countBy').mockResolvedValue(0);
+
+      const result = await service.getVideoCount(userId);
+
+      expect(videoRepository.countBy).toHaveBeenCalledTimes(1);
+      expect(videoRepository.countBy).toHaveBeenCalledWith({
+        userId,
+      });
+
+      expect(result).toBe(0);
     });
   });
 });
