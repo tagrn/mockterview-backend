@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  NotFoundException,
   Post,
   Query,
   UploadedFile,
@@ -55,6 +56,9 @@ export class VideoController {
     @Query('videoId') videoId: number,
   ): Promise<string> {
     const videoSchema = await this.videoService.getVideo(videoId, user.id);
+    if (!videoSchema) {
+      throw new NotFoundException();
+    }
     return this.configService.get('S3_OBJECT_URL') + videoSchema.fileName;
   }
 

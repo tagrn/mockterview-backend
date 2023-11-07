@@ -20,6 +20,9 @@ export class VideoService {
 
   async getVideo(id: number, userId: number): Promise<VideoSchema> {
     const video = await this.videoRepository.findOneBy({ id, userId });
+    if (!video) {
+      return video;
+    }
     return new VideoSchema(
       video.id,
       video.userId,
