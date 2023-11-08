@@ -3,8 +3,9 @@ import { VideoService } from './video.service';
 import { AwsService } from 'src/aws/aws.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Video } from 'src/entities/video';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { User } from 'src/entities/user.entity';
+import { UnsavedVideoSchema } from 'src/video/schemas/video.schema';
 
 const id = 1;
 const userId = 1;
@@ -198,6 +199,46 @@ describe('VideoService', () => {
       });
 
       expect(result.length).toBe(0);
+    });
+  });
+
+  describe('saveVideo', () => {
+    const unsavedVideo: UnsavedVideoSchema = new UnsavedVideoSchema(
+      userId,
+      questionSetTitle,
+      question,
+      fileName,
+    );
+    it('정상적인 데이터로 저장 성공', async () => {
+      jest.spyOn(videoRepository, 'save').mockResolvedValue(mockVideo);
+
+      const result = await service.saveVideo(unsavedVideo);
+
+      expect(videoRepository.save).toHaveBeenCalledTimes(1);
+      expect(videoRepository.save).toHaveBeenCalledWith({
+        ...unsavedVideo,
+      });
+
+      expect(result).toBe(id);
+    });
+
+    it('존재하지 않는 유저 id가 들어갔을 경우', async () => {
+      jest
+        .spyOn(videoRepository, 'save')
+        .mockRejectedValue(new Error('foriegn key error'));
+
+      const wrongUserId = 999999;
+      unsavedVideo.userId = wrongUserId;
+      try {
+        await service.saveVideo(unsavedVideo);
+      } catch (e) {
+        expect(e.message).toBe('foriegn key error');
+      }
+
+      expect(videoRepository.save).toHaveBeenCalledTimes(1);
+      expect(videoRepository.save).toHaveBeenCalledWith({
+        ...unsavedVideo,
+      });
     });
   });
 });
