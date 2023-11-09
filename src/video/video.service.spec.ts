@@ -1,3 +1,5 @@
+import { PutObjectCommand, PutObjectRequest } from '@aws-sdk/client-s3';
+import { InternalServerErrorException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AwsService } from 'src/aws/aws.service';
@@ -24,6 +26,33 @@ const mockVideo: Video = {
   deletedAt: new Date(),
 };
 
+class MockS3Client {
+  async send(command: PutObjectCommand) {
+    if (!command.input.Body) {
+      throw new Error('Invalid Body');
+    }
+    if (!command.input.Bucket) {
+      throw new Error('Invalid Bucket');
+    }
+    if (!command.input.Key) {
+      throw new Error('Invalid Key');
+    }
+    return;
+  }
+  destory(): void {
+    return;
+  }
+}
+const mockS3Client = new MockS3Client();
+
+const mockBucket = 'mockBucket';
+const video: any = 'data';
+const putObjectRequest = {
+  Bucket: mockBucket,
+  Key: fileName,
+  Body: video,
+} as PutObjectRequest;
+
 describe('VideoService', () => {
   let service: VideoService;
   let videoRepository: Repository<Video>;
@@ -32,7 +61,13 @@ describe('VideoService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         VideoService,
-        { provide: AwsService, useValue: {} },
+        {
+          provide: AwsService,
+          useValue: {
+            getS3PutParams: async (_, __) => putObjectRequest,
+            getConfiguredS3Client: async () => mockS3Client,
+          },
+        },
         {
           provide: getRepositoryToken(Video),
           useClass: Repository<Video>,
@@ -239,6 +274,24 @@ describe('VideoService', () => {
       expect(videoRepository.save).toHaveBeenCalledWith({
         ...unsavedVideo,
       });
+    });
+  });
+
+  describe('uploadVideoToS3', () => {
+    it('영상 업로드 요청 성공', async () => {
+      jest.spyOn(mockS3Client, 'send');
+
+      await service.uploadVideoToS3(fileName, video);
+    });
+
+    it('영상 업로드 요청 실패', async () => {
+      jest.spyOn(mockS3Client, 'send').mockRejectedValue(new Error());
+
+      try {
+        await service.uploadVideoToS3(fileName, video);
+      } catch (e) {
+        expect(e).toBeInstanceOf(InternalServerErrorException);
+      }
     });
   });
 });
