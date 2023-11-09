@@ -68,8 +68,6 @@ export class VideoService {
     } catch (err) {
       Logger.error(`${fileName} S3 Upload Error`, err);
       throw new InternalServerErrorException();
-    } finally {
-      s3Client.destroy();
     }
   }
 }
