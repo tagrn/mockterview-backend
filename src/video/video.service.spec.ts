@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { VideoService } from './video.service';
-import { AwsService } from 'src/aws/aws.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Video } from 'src/entities/video';
-import { QueryFailedError, Repository } from 'typeorm';
+import { AwsService } from 'src/aws/aws.service';
 import { User } from 'src/entities/user.entity';
+import { Video } from 'src/entities/video';
 import { UnsavedVideoSchema } from 'src/video/schemas/video.schema';
+import { Repository } from 'typeorm';
+import { VideoService } from './video.service';
 
 const id = 1;
 const userId = 1;
