@@ -31,7 +31,7 @@ export class QuestionSetViewCount {
   user: User;
 
   @ManyToOne(() => QuestionSet, (qs) => qs.questionSetViewCounts, {
-    onDelete: 'NO ACTION',
+    onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
     lazy: true,
   })
