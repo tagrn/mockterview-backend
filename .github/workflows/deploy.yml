@@ -15,7 +15,7 @@ jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Deploy
-    runs-on: [mockterview]
+    runs-on: [mock]
     strategy:
       matrix:
         node-version: [18.17.0]
