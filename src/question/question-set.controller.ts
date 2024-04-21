@@ -75,6 +75,9 @@ export class QuestionSetController {
     @Query('view', new DefaultValuePipe(false), ParseBoolPipe)
     isViewing: boolean,
   ): Promise<QuestionSetResponse> {
+    if (user.id === 0) {
+      user.id = 2;
+    }
     const questionSet = await this.questionService.getQuestionSetByIdAndUserId(
       user.id,
       id,
